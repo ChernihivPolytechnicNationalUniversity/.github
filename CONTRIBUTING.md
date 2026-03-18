@@ -208,6 +208,7 @@ Fixes #88, #91
 docs(contributing): describes the standards for making commits
 
 Refs ChernihivPolytechnicNationalUniversity/npp-api#8
+Refs: 676104e, a215868
 ```
 
 ### Breaking changes
