@@ -1,5 +1,9 @@
 <div align="center">
-  <img width="100%" src="https://capsule-render.vercel.app/api?type=waving&height=165&section=header&text=Contributing%20Guide&fontSize=48&fontColor=ffffff&animation=fadeIn&fontAlignY=50&theme=tokyonight" alt="Contributing Guide header" />
+  <img
+    width="100%"
+    src="https://capsule-render.vercel.app/api?type=waving&height=165&section=header&text=Contributing%20Guide&fontSize=48&fontColor=fbf1c7&animation=fadeIn&fontAlignY=50&color=0:076678,50:B57614,100:8F3F71"
+    alt="Contributing Guide header"
+  />
 </div>
 <img
   align="left"
