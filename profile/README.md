@@ -16,7 +16,7 @@ The Contributing Guide describes contribution conventions, commit rules, workflo
 
 <p align="center">
   <a href="https://stu.cn.ua">
-    <img src="https://img.shields.io/badge/Visit%20Website-0D63AA?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Visit Website" />
+    <img src="https://img.shields.io/badge/stu.cn.ua-0D63AA?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Visit Website" />
   </a>
   &nbsp;&nbsp;&nbsp;
   <a href="https://github.com/ChernihivPolytechnicNationalUniversity/.github-private/blob/main/CONTRIBUTING.md">
