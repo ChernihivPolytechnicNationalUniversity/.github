@@ -20,11 +20,28 @@ It links to the core conventions that currently define how changes should be
 described and versioned across repositories in this organization.
 
 <a href="./docs/commit-convention.md">
-  <img src="https://img.shields.io/badge/Commit%20Convention-Conventional%20Commits-B57614?style=for-the-badge&logo=git&logoColor=white" alt="Commit Convention" />
+  <img src="https://img.shields.io/badge/Commits-Conventional%20Commits-B57614?style=for-the-badge&logo=git&logoColor=white" alt="Conventional Commits" />
 </a>
 <a href="./docs/versioning.md">
-  <img src="https://img.shields.io/badge/Versioning-SemVer-076678?style=for-the-badge&logo=semanticrelease&logoColor=white" alt="Versioning (SemVer)" />
+  <img src="https://img.shields.io/badge/Versioning-SemVer%202.0.0-076678?style=for-the-badge&logo=semanticrelease&logoColor=white" alt="Semantic Versioning 2.0.0" />
 </a>
 
 <br clear="left" />
 
+## Why commit conventions matter
+
+Commit history should be clear, structured, and easy to interpret.
+
+Using a shared commit convention makes changes easier to scan, classify, and trace
+over time. It improves repository readability and helps contributors distinguish
+between features, fixes, refactors, documentation changes, and breaking changes
+without relying on inconsistent message styles.
+
+## Why versioning matters
+
+Versioning should communicate release meaning, not just release order.
+
+A shared versioning standard makes it clear whether a release introduces a fix,
+new backward-compatible functionality, or a breaking change. This improves release
+communication, helps maintain a readable history, and supports changelog generation
+and rollback analysis.
