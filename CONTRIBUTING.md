@@ -1,3 +1,11 @@
+<div align="center">
+  <img
+    width="100%"
+    src="https://capsule-render.vercel.app/api?type=waving&height=185&section=header&text=Contributing%20Guide&fontSize=48&fontColor=fbf1c7&animation=fadeIn&fontAlignY=38&desc=Shared%20standards%20for%20contributions%20across%20the%20organization&descAlignY=57&color=0:076678,50:B57614,100:8F3F71"
+    alt="Contributing Guide header"
+  />
+</div>
+
 <img
 align="left"
 width="200"
