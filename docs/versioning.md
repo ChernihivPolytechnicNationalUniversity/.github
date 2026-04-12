@@ -18,8 +18,8 @@ compared to the previous one.
 Format: `MAJOR.MINOR.PATCH`. Non-negative integers without leading zeros.
 
 <p align="center">
-  <img src="../assets/semver-structure-dark.png#gh-dark-mode-only" alt="SemVer structure" width="500" />
-  <img src="../assets/semver-structure-light.png#gh-light-mode-only" alt="SemVer structure" width="500" />
+  <img src="../assets/semver-structure-dark.png#gh-dark-mode-only" alt="SemVer structure" />
+  <img src="../assets/semver-structure-light.png#gh-light-mode-only" alt="SemVer structure" />
 </p>
 
 A version consists of three required parts (version core) and two optional ones
