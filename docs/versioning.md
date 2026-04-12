@@ -1,5 +1,5 @@
-<img align="left" width="210" hspace="28" src="../assets/semver-logo-dark.png#gh-light-mode-only" alt="SemVer illustration" />
-<img align="left" width="210" hspace="28" src="../assets/semver-logo-light.png#gh-dark-mode-only" alt="SemVer illustration" />
+<img align="left" width="210" hspace="28" src="../assets/semver-logo-dark.png#gh-dark-mode-only" alt="SemVer illustration" />
+<img align="left" width="210" hspace="28" src="../assets/semver-logo-light.png#gh-light-mode-only" alt="SemVer illustration" />
 
 This organization uses **Semantic Versioning 2.0.0** for versioning releases.
 
@@ -18,8 +18,8 @@ compared to the previous one.
 Format: `MAJOR.MINOR.PATCH`. Non-negative integers without leading zeros.
 
 <p align="center">
-  <img src="../assets/semver-structure-dark.png#gh-light-mode-only" alt="SemVer structure" width="500" />
-  <img src="../assets/semver-structure-light.png#gh-dark-mode-only" alt="SemVer structure" width="500" />
+  <img src="../assets/semver-structure-dark.png#gh-dark-mode-only" alt="SemVer structure" width="500" />
+  <img src="../assets/semver-structure-light.png#gh-light-mode-only" alt="SemVer structure" width="500" />
 </p>
 
 A version consists of three required parts (version core) and two optional ones
