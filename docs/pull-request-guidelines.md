@@ -10,11 +10,6 @@ strategies for different branch types, code review requirements, and CI.
 
 <br clear="left" />
 
-<p align="center">
-  <img src="../assets/pull-request-flow-light.png#gh-light-mode-only" alt="Pull Request flow" width="800" />
-  <img src="../assets/pull-request-flow-dark.png#gh-dark-mode-only" alt="Pull Request flow" width="800" />
-</p>
-
 ## Process
 
 1. Create a [topic branch](./branch-strategy.md#branches) from `dev`
@@ -94,3 +89,8 @@ Dependabot creates PRs automatically to update dependencies. These PRs go
 through the same process: CI, review, merge. Dependabot has a bypass for the
 [branch naming rule](./branch-strategy.md#rulesets), since its branches
 `dependabot/*` do not follow git-flow naming.
+
+<p align="center">
+  <img src="../assets/pull-request-flow-light.png#gh-light-mode-only" alt="Pull Request flow" width="800" />
+  <img src="../assets/pull-request-flow-dark.png#gh-dark-mode-only" alt="Pull Request flow" width="800" />
+</p>
