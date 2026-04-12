@@ -11,8 +11,8 @@ strategies for different branch types, code review requirements, and CI.
 <br clear="left" />
 
 <p align="center">
-  <img src="../assets/pull-request-flow-light.png#gh-light-mode-only" alt="Pull Request flow" />
-  <img src="../assets/pull-request-flow-dark.png#gh-dark-mode-only" alt="Pull Request flow" />
+  <img src="../assets/pull-request-flow-light.png#gh-light-mode-only" alt="Pull Request flow" width="800" />
+  <img src="../assets/pull-request-flow-dark.png#gh-dark-mode-only" alt="Pull Request flow" width="800" />
 </p>
 
 ## Process
