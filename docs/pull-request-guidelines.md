@@ -90,6 +90,8 @@ through the same process: CI, review, merge. Dependabot has a bypass for the
 [branch naming rule](./branch-strategy.md#rulesets), since its branches
 `dependabot/*` do not follow git-flow naming.
 
+---
+
 <p align="center">
   <img src="../assets/pull-request-flow-light.png#gh-light-mode-only" alt="Pull Request flow" width="800" />
   <img src="../assets/pull-request-flow-dark.png#gh-dark-mode-only" alt="Pull Request flow" width="800" />
