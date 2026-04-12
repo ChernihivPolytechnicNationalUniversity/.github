@@ -7,7 +7,9 @@
 />
 
 This organization uses **Gitflow** a branching model first described by
-Vincent Driessen in 2010. Rules are enforced at the GitHub level through
+Vincent Driessen in 2010. 
+
+Rules are enforced at the GitHub level through
 Rulesets and will not let you push a branch with an invalid name or merge a PR
 without following the process.
 
@@ -115,15 +117,13 @@ binary in [releases](https://github.com/gittower/git-flow-next/releases).
 Find the URL of the latest version:
 
 ```bash
-curl -sL https://api.github.com/repos/gittower/git-flow-next/releases/latest \
-  | grep browser_download_url
+curl -sL https://api.github.com/repos/gittower/git-flow-next/releases/latest | grep browser_download_url
 ```
 
 Download and install:
 
 ```bash
-curl -L -o git-flow-next.tar.gz \
-  https://github.com/gittower/git-flow-next/releases/download/v1.1.0/git-flow-next-v1.1.0-linux-amd64.tar.gz
+curl -L -o git-flow-next.tar.gz https://github.com/gittower/git-flow-next/releases/download/v1.1.0/git-flow-next-v1.1.0-linux-amd64.tar.gz
 tar xzf git-flow-next.tar.gz
 sudo install -m 755 git-flow-v1.1.0-linux-amd64 /usr/local/bin/git-flow
 git flow version
