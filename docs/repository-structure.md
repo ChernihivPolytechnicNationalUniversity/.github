@@ -66,6 +66,29 @@ repo/
 
 Деталі релізного процесу описані в [release-process](./release-process.md).
 
+## Shared actions
+
+Стандарти CI/CD реалізовані через
+[shared-actions](https://github.com/ChernihivPolytechnicNationalUniversity/shared-actions)
+– набір reusable composite GitHub Actions, які використовують усі репозиторії
+організації. Замість того, щоб кожен репо мав свою копію логіки збірки,
+деплою та нотифікацій, всі вони викликають одні й ті самі actions.
+
+Доступні actions:
+
+- **docker-build-push** – збирає Docker-образ та пушить у GHCR з semver
+  тегуванням і registry cache
+- **k8s-azure-login** – Azure federated OIDC login, kubelogin та підготовка
+  kubeconfig для деплою через Helm
+- **collect-commits** – формує base64-encoded HTML список комітів між поточним
+  та попереднім semver тегом для нотифікації про реліз
+- **notify** – відправляє CI або deploy нотифікацію через
+  [notification-service](https://github.com/ChernihivPolytechnicNationalUniversity/notification-service)
+
+Це дозволяє підтримувати єдиний стандарт CI/CD: коли змінюється логіка
+деплою, оновлення доходить до всіх репо одночасно через `@main` reference у
+shared-actions.
+
 ## GitHub Environments
 
 На кожному репозиторії мають бути налаштовані два environments:
