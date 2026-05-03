@@ -29,7 +29,7 @@ repo/
 ├── .github/
 │   └── workflows/
 │       ├── ci-build.yml          # CI: перевірка збірки на кожен PR
-│       └── *-deploy.yml          # CD: build + deploy
+│       └── deploy.yml            # CD: build + deploy
 ├── .infra/
 │   └── helm/
 │       ├── Chart.yaml
@@ -56,9 +56,8 @@ repo/
 проєкт збирається. Використовується як required status check в
 [Require CI](./branch-strategy.md#rulesets) ruleset.
 
-**Deploy workflow** (назва залежить від репо) збирає Docker-образ, пушить в
-GitHub Container Registry та деплоїть через Helm. Тригери залежать від типу
-репозиторію:
+**deploy.yml** збирає Docker-образ, пушить в GitHub Container Registry та
+деплоїть через Helm. Тригери залежать від типу репозиторію:
 
 - Multi-env:
   - push в `dev` → dev-оточення
@@ -102,7 +101,7 @@ debug flags, swagger).
 **values-prod.yaml** (тільки multi-env) – overrides для prod: production хост,
 більше реплік (як правило 2), строгіші налаштування.
 
-Deploy workflow виконує `helm upgrade --install` з потрібним values-файлом та
+deploy.yml виконує `helm upgrade --install` з потрібним values-файлом та
 передає `image.tag` з версією зібраного Docker-образу.
 
 ## App
@@ -111,8 +110,8 @@ Deploy workflow виконує `helm upgrade --install` з потрібним va
 фронтенду, `back/` для бекенду. Всередині – Dockerfile, вихідний код,
 конфігурація збірки та `docker-compose.yml` для локальної розробки.
 
-Dockerfile є точкою входу для CI/CD – і ci-build.yml, і deploy workflow
-збирають образ саме з нього.
+Dockerfile є точкою входу для CI/CD – і ci-build.yml, і deploy.yml збирають
+образ саме з нього.
 
 ## Docs
 
