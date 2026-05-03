@@ -11,6 +11,17 @@
 
 <br clear="left" />
 
+## Типи репозиторіїв
+
+Репозиторії діляться на два типи за кількістю оточень.
+
+**Multi-env** – має окремі dev та prod оточення. Деплой на dev відбувається на
+push в `dev`, на prod – на push тегу `v*`. У `.infra/helm/` лежать
+`values-dev.yaml` та `values-prod.yaml` поверх `values.yaml`.
+
+**Mono-env** – має тільки одне production-оточення. Деплой відбувається тільки
+на push тегу `v*`. У `.infra/helm/` лежить лише `values.yaml`.
+
 ## Структура
 
 ```text
@@ -18,16 +29,17 @@ repo/
 ├── .github/
 │   └── workflows/
 │       ├── ci-build.yml          # CI: перевірка збірки на кожен PR
-│       └── *-deploy.yml          # CD: build + deploy на push в dev та tag v*
+│       └── *-deploy.yml          # CD: build + deploy
 ├── .infra/
 │   └── helm/
 │       ├── Chart.yaml
 │       ├── templates/
 │       ├── values.yaml           # base values
-│       ├── values-dev.yaml       # dev overrides
-│       └── values-prod.yaml      # prod overrides
+│       ├── values-dev.yaml       # multi-env: dev overrides
+│       └── values-prod.yaml      # multi-env: prod overrides
 ├── <app>/                        # код застосунку (ui/, back/, тощо)
 │   ├── Dockerfile
+│   ├── docker-compose.yml        # для локальної розробки
 │   ├── src/
 │   └── ...
 ├── docs/                         # документація проєкту
@@ -44,9 +56,29 @@ repo/
 проєкт збирається. Використовується як required status check в
 [Require CI](./branch-strategy.md#rulesets) ruleset.
 
-**Deploy workflow** (назва залежить від репо) запускається на push в `dev` та
-на push тегу `v*.*.*`. Збирає Docker-образ, пушить в GitHub Container Registry
-та деплоїть через Helm.
+**Deploy workflow** (назва залежить від репо) збирає Docker-образ, пушить в
+GitHub Container Registry та деплоїть через Helm. Тригери залежать від типу
+репозиторію:
+
+- Multi-env:
+  - push в `dev` → dev-оточення
+  - реліз через `dev → main` + push тегу `v*` на `main` → prod-оточення
+- Mono-env: реліз через `dev → main` + push тегу `v*` на `main` → production
+
+Деталі релізного процесу описані в [release-process](./release-process.md).
+
+## GitHub Environments
+
+На кожному репозиторії мають бути налаштовані два environments:
+
+- **production**
+- **development**
+
+Це обов'язкова вимога: GitHub Environments використовуються для авторизації в
+Entra ID під час деплою. Без них workflow не зможе отримати токен для пушу
+секретів та інтеграцій.
+
+Налаштовуються в **Settings → Environments**.
 
 ## Infra
 
@@ -56,27 +88,28 @@ Helm chart в `.infra/helm/`.
 **Chart.yaml** описує метадані chart-у: назва, опис, версія.
 
 **templates/** містить Kubernetes-маніфести: deployment, service, ingress.
-Шаблони параметризовані через values і однакові для dev та prod – відрізняється
-тільки конфігурація.
+Шаблони параметризовані через values – відрізняється тільки конфігурація між
+оточеннями.
 
-**values.yaml** – базові значення, спільні для обох оточень: image pull policy,
-ресурси (CPU, memory), liveness/readiness probes, стратегія деплою
-(RollingUpdate).
+**values.yaml** – базові значення для multi-env (спільні для dev та prod) або
+єдиний values-файл для mono-env. Містить image pull policy, ресурси (CPU,
+memory), liveness/readiness probes, стратегію деплою.
 
-**values-dev.yaml** – overrides для dev: хост ingress, кількість реплік (як
-правило 1), environment-specific змінні (logging level, debug flags, swagger).
+**values-dev.yaml** (тільки multi-env) – overrides для dev: хост ingress,
+кількість реплік (як правило 1), environment-specific змінні (logging level,
+debug flags, swagger).
 
-**values-prod.yaml** – overrides для prod: production хост, більше реплік (як
-правило 2), строгіші налаштування (swagger вимкнений, logging level INFO).
+**values-prod.yaml** (тільки multi-env) – overrides для prod: production хост,
+більше реплік (як правило 2), строгіші налаштування.
 
-Deploy workflow під час деплою виконує `helm upgrade --install` з потрібним
-values-файлом та передає `image.tag` з версією зібраного Docker-образу.
+Deploy workflow виконує `helm upgrade --install` з потрібним values-файлом та
+передає `image.tag` з версією зібраного Docker-образу.
 
 ## App
 
 Код застосунку в окремій директорії. Назва залежить від проєкту: `ui/` для
-фронтенду, `back/` для бекенду. Всередині – Dockerfile, вихідний код та
-конфігурація збірки.
+фронтенду, `back/` для бекенду. Всередині – Dockerfile, вихідний код,
+конфігурація збірки та `docker-compose.yml` для локальної розробки.
 
 Dockerfile є точкою входу для CI/CD – і ci-build.yml, і deploy workflow
 збирають образ саме з нього.
