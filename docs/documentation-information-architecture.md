@@ -50,7 +50,7 @@ Required files, each with a defined role:
 | `AGENTS.md` | LLM agents | open standard ([agents.md](https://agents.md)), never a committed CLAUDE.md. Machine-oriented: architecture-in-brief, commands, conventions, gotchas. MUST link README + `docs/` + skills, and the [agent-tooling standard](./agent-tooling.md) |
 | `docs/` (optional) | humans | **service-scoped deep-dives only**: internals, service API detail, business logic, diagrams, guidebooks. Linked from README; back-referenced from the service's du-docs entry |
 | `.agents/skills/<name>/SKILL.md` (optional) | LLM agents | repo-specific skills, committed (team asset) — see the [agent-tooling standard](./agent-tooling.md) |
-| `.claude/skills/<name>` | Claude Code | committed **symlinks** → `../../.agents/skills/<name>` — see the [agent-tooling standard](./agent-tooling.md), incl. the Windows caveat |
+| `.claude/skills` | Claude Code | ONE committed dir-level **symlink** → `../.agents/skills` — see the [agent-tooling standard](./agent-tooling.md), incl. the Windows caveat |
 | `CLAUDE.md` | Claude Code (per-user) | **gitignored** thin facade `@AGENTS.md` |
 
 **Ban list for repo docs (this is where split-brain comes from):**

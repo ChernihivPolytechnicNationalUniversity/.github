@@ -41,7 +41,7 @@ Each developer creates it locally (or lets Claude Code do so). Recommended
 `.gitignore` entries:
 
 ```gitignore
-# per-user agent-tooling files (committed: .claude/skills symlinks)
+# per-user agent-tooling files (committed: the .claude/skills symlink)
 CLAUDE.md
 .claude/*
 !.claude/skills
@@ -54,38 +54,41 @@ Repo-specific agent skills are team assets and live in the repo, following the o
 
 ```
 .agents/skills/<skill-name>/SKILL.md      ← canonical, committed
-.claude/skills/<skill-name>               ← committed SYMLINK → ../../.agents/skills/<skill-name>
+.claude/skills                            ← ONE committed dir-level SYMLINK → ../.agents/skills
 ```
 
 - `.agents/skills/` is the emerging cross-client convention — Codex and other clients
   scan it natively.
-- `.claude/skills/` symlinks give Claude Code native discovery with zero per-user
-  setup on macOS/Linux (Claude Code follows symlinks).
+- The single `.claude/skills` symlink gives Claude Code native discovery with zero
+  per-user setup on macOS/Linux (Claude Code follows symlinks). Created once per
+  repo — adding a new skill needs no extra link.
 - Repo root stays tool-agnostic — the AGENTS.md-over-CLAUDE.md principle applied to
   skills.
 - Third-party skills are **never vendored** into repos — install them per-user.
+- Consequence of the dir-level link: everything under `.agents/skills/` is exposed to
+  Claude Code, and personal uncommitted skills can't live inside the repo's
+  `.claude/skills/` — keep those in `~/.claude/skills/`.
 
-Creating the symlink (macOS/Linux):
+Creating the symlink (macOS/Linux, once per repo):
 
 ```bash
-mkdir -p .claude/skills
-ln -s ../../.agents/skills/<skill-name> .claude/skills/<skill-name>
-git add .claude/skills/<skill-name>
+ln -s ../.agents/skills .claude/skills
+git add .claude/skills
 ```
 
 ### Skill scopes
 
 | Scope | Location | Committed? |
 |---|---|---|
-| Repo-specific (team asset) | `<repo>/.agents/skills/` + `.claude/skills/` symlinks | yes |
+| Repo-specific (team asset) | `<repo>/.agents/skills/` + the `.claude/skills` symlink | yes |
 | Workspace/meta | the maintainer's workspace control-center repo | private repo |
 | Personal | `~/.claude/skills/` (or `~/.agents/skills/`) | no (per-user) |
 
 ## 4. Windows setup (symlink caveat)
 
 Git creates real symlinks on Windows only when both of these hold; otherwise the
-committed `.claude/skills/<name>` entries arrive as **plain text files** containing
-the link target path (harmless, but Claude Code won't discover the skills):
+committed `.claude/skills` entry arrives as a **plain text file** containing the link
+target path (harmless, but Claude Code won't discover the skills):
 
 1. **Developer Mode** is enabled (Settings → System → For developers), which allows
    creating symlinks without elevation, and
@@ -99,14 +102,16 @@ git config core.symlinks true
 git checkout -- .claude/skills
 ```
 
-**Copy fallback** (no Developer Mode available): delete the text-file placeholders
-and copy the skill directories instead, then hide the local change from git:
+**Copy fallback** (no Developer Mode available): delete the text-file placeholder and
+copy the skills directory instead, then hide the local change from git:
 
 ```powershell
-Remove-Item .claude\skills\<skill-name>
-Copy-Item -Recurse .agents\skills\<skill-name> .claude\skills\<skill-name>
-git update-index --skip-worktree .claude/skills/<skill-name>
+Remove-Item .claude\skills
+Copy-Item -Recurse .agents\skills .claude\skills
+git update-index --skip-worktree .claude/skills
 ```
+
+The copy does not auto-sync — re-copy after a `git pull` that changes `.agents/skills/`.
 
 Note: `.agents/skills/` itself always works regardless — Codex-family tools are
 unaffected; the caveat is only Claude Code's `.claude/skills/` discovery path.
@@ -115,6 +120,6 @@ unaffected; the caveat is only Claude Code's `.claude/skills/` discovery path.
 
 - [ ] `AGENTS.md` at root per §1, linking this standard.
 - [ ] `CLAUDE.md` + `.claude/*` gitignored per §2 (with the `!.claude/skills` exception).
-- [ ] Skills (if any) under `.agents/skills/` with `.claude/skills/` symlinks per §3.
+- [ ] Skills (if any) under `.agents/skills/` with the single `.claude/skills` symlink per §3.
 - [ ] README `## Documentation` block links this standard (template:
   [`du-gateway/README.md`](https://github.com/ChernihivPolytechnicNationalUniversity/du-gateway/blob/main/README.md)).
