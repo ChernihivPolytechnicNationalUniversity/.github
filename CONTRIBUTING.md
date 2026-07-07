@@ -9,6 +9,8 @@
 This document is the entry point for contribution standards used across this
 organization. Each document below covers a specific part of the workflow.
 
+> 📚 **Where does my doc go?** See [Where documentation lives](docs/where-docs-live.md).
+
 <p align="center">
   <a href="https://github.com/ChernihivPolytechnicNationalUniversity/.github/blob/main/docs/branch-strategy.md">
     <img src="https://img.shields.io/badge/Branches-Gitflow-8F3F71?style=for-the-badge&logo=git&logoColor=white" alt="Branch Strategy" />
