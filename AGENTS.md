@@ -15,6 +15,7 @@ The org-level special `.github` repo for **Digital University** at Chernihiv Pol
 - `docs/release-process.md` — release flow (currently **empty / stub**).
 - `docs/repository-structure.md` — standard layout every org repo follows: mono-env (single prod environment, deploy on `v*` tag, one `values.yaml`) vs. multi-env (dev + prod, deploy on push to `dev` / on `v*` tag, `values-dev.yaml` + `values-prod.yaml` layered over `values.yaml`) under `.infra/helm/`. Written in **Ukrainian**.
 - `docs/observability-standard.md` — `DU-RFC-001`, the normative (RFC 2119) observability standard for services on the shared Kubernetes cluster. Status: Draft.
+- `docs/agent-tooling.md` — the org standard for how repos expose context/workflows to AI coding agents: AGENTS.md convention, skills layout, CLAUDE.md facade. Linked from every repo's AGENTS.md and README.
 - `docs/documentation-information-architecture.md` — the design spec deciding where each kind of Digital University documentation lives (du-docs vs. this repo vs. per-repo docs) and the migration plan to get there.
 - `docs/where-docs-live.md` — a one-screen quick-reference mirror of that map, linked from `CONTRIBUTING.md`.
 - `assets/` — PNG/SVG illustrations referenced by the docs (Gitflow, PR flow, SemVer); some use `#gh-light-mode-only` / `#gh-dark-mode-only` for theme-aware rendering.
