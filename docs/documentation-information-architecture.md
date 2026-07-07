@@ -1,133 +1,136 @@
-# Digital University — Documentation Information Architecture (Design Spec)
+# Digital University — Documentation Information Architecture
 
-**Date:** 2026-06-09
-**Status:** Adopted
-**Topic:** Where each kind of documentation lives across the DU repos, and how to migrate to it.
+**Date:** 2026-07-07 · **Status:** Adopted (supersedes the 2026-06-09 version of this document)
 
-## Context
+One rule set answering: *what type of information lives where, in what language, who
+reads it, how it is cross-linked, and how it stays true.* Every documentation type has
+exactly **one canonical home**; every other surface **links** to it — never copies.
+This spec exists because doc content historically spread over four kinds of homes
+(du-docs portal, per-repo files, `.github` standards, workspace meta files) and drift
+breeds wherever the rule is unstated.
 
-The Digital University (DigitUni / НУЧП) platform spans ~18 active repos plus several
-documentation homes that have grown organically and now **overlap**:
+## 1. Audiences
 
-- **du-docs** — Docusaurus 3 site, live at `docs.npp.whiteforge.ai` (Entra-gated, internal). Already
-  the richest and most current docs: arc42 architecture, MADR ADRs (incl. an accurate BFF+OBO ADR),
-  IAM how-tos, a Diátaxis doc-authoring guide, and (stub) product docs.
-- **digital-university-architecture** — Fumadocs site (Cloudflare). C4/ERD/sequence diagrams, ADR-001…003,
-  OpenAPI copy. **Outdated and now obsolete** — du-docs has superseded it.
-- **.github** — org profile + engineering standards (branch strategy, commit convention, PR guidelines,
-  versioning, release process, observability, repository structure). GitHub surfaces these org-wide.
-- **per-repo** `README.md` + `AGENTS.md` — service-local docs (created/refreshed in phase 1).
-- **du-api-contracts** — OpenAPI 3.1 specs + generated TS/Java clients (the real API source of truth).
-- **DIGITAL-UNIVERSITY-OVERVIEW.md** (workspace root) — a verified, English, cross-repo architecture
-  overview produced this session (with a refresh recipe in `OVERVIEW-REFRESH.md`).
+| Audience | Entry points (in reading order) | What they need |
+|---|---|---|
+| Developer — student, colleague, or external contributor (same person, different moments) | du-docs portal (platform picture, component briefs) → repo `README.md` + `docs/` (service work) → `.github` standards (process: branching, commits, PRs, releases) | understand the platform, build/run/change a service, follow the process |
+| LLM agent (Claude Code, Codex, Cursor, …) | repo `AGENTS.md` + repo skills (service context, workflows) → du-docs for cross-service/platform context when designing or implementing multi-service tasks (the portal is auth-walled — agents read the local `du-docs` repo source) | machine-oriented service context + the same canonical platform picture humans get |
+| End user / university staff | du-docs product sections (Ukrainian) | how to use the products |
+| Platform maintainer | workspace meta level (see §2.5) | sync state, gaps, verified snapshot |
 
-**Problem:** there is no single rule for *what information belongs where*. Architecture docs and ADRs
-exist in two sites; contribution/process guidance is split across three places; OpenAPI is duplicated.
-Readers and authors don't know the canonical home, and content drifts out of date (as the architecture
-repo did).
+## 2. The homes and their contracts
 
-**Goal:** define one canonical home per documentation type, with everything else linking to it, and a
-phased migration to reach that state. **du-docs is the single human-facing portal.**
+### 2.1 du-docs — the canonical human portal (`docs.npp.whiteforge.ai`)
 
-## Decisions (confirmed with the user)
+**Owns:** general project description; platform architecture (arc42 12 sections);
+**brief** component descriptions (what each service is, why it exists, how it relates);
+overall tech stack; architecture decisions (MADR ADRs); IAM how-tos; product/user docs;
+doc-authoring guide (`contributing/`).
 
-1. **du-docs is the single human-facing documentation portal.**
-2. **digital-university-architecture is obsolete** — to be archived by the user; not a migration source
-   and never referenced as canonical. Its only previously-unique assets (PlantUML diagrams, OpenAPI) are
-   superseded by du-docs (diagrams) and du-api-contracts (OpenAPI).
-3. **`.github` ↔ du-docs boundary = Approach A:** `.github` stays the canonical home for repo-agnostic
-   governance/process (GitHub surfaces it org-wide); du-docs owns all technical & product documentation;
-   du-docs links to `.github` for git/commit/PR/release rather than duplicating.
-4. **Language by audience:**
-   - **Technical documentation → English** (architecture, ADRs, IAM how-tos, API contracts, per-repo
-     README/AGENTS.md, engineering standards, the doc-authoring guide).
-   - **User documentation → Ukrainian** (product docs: `npp`, `student-cab`, `documents` — anything an
-     end-user / university staff member reads, whether service- or platform-related).
-5. **Deliverable of this brainstorm:** this taxonomy spec **plus** the migration plan below.
+**Explicitly does NOT own:** service internals (→ repo `docs/`), build/run/test
+commands (→ repo README/AGENTS.md), git/PR/release process (→ this repo), API schemas
+(→ du-api-contracts).
 
-## The taxonomy — canonical home for every doc type
+**Component-description rule:** for each service, du-docs carries a *brief* entry —
+role, boundaries, key relationships — and **back-references** the repo's README and
+`docs/` deep-dives for anything deeper. Briefs live as entries in arc42
+`05-building-blocks.md` + the service-relationship edge table, each linking the repo —
+**no** per-service portal pages (less surface to drift).
 
-| Doc type | Canonical home | Language | Notes |
-|---|---|---|---|
-| Service build/run/test, internals, gotchas | service repo — `README.md` (humans) + `AGENTS.md` (agents) | English | One service only. README links to du-docs for cross-cutting context. |
-| Platform architecture (context, building blocks, runtime, deployment, crosscutting) | **du-docs** `platform/architecture/` (arc42) | English | Single source of truth. `DIGITAL-UNIVERSITY-OVERVIEW.md` content lands here. |
-| Architecture decisions (ADRs) | **du-docs** `platform/decisions/` (MADR) | English | Sequential, immutable once accepted; supersede with a new ADR. |
-| IAM / identity how-tos | **du-docs** `platform/iam/` | English | Entra app registrations, add-new-service, permissions catalog. |
-| Product / user docs | **du-docs** `npp/`, `student-cab/`, `documents/` | **Ukrainian** | Currently stubs — to be grown. |
-| Doc-authoring guide (Diátaxis, style, diagrams, tags) | **du-docs** `contributing/` | English | Doc-writing only; carries the Ukrainian style rules used for user docs; links to `.github` for git process. |
-| Engineering governance (branch strategy, commit convention, PR guidelines, versioning, release, observability, repo structure) | **.github** `docs/` + `CONTRIBUTING.md` | English | Repo-agnostic; GitHub surfaces org-wide. |
-| Org identity | **.github** `profile/README.md` | English (UA acceptable for org landing) | Org landing page. |
-| API contracts / OpenAPI | **du-api-contracts** | English | Spec + generated clients. du-docs links/renders an "API reference" page; never copies. |
-| Cross-repo architecture overview (English onboarding quick-ref) | workspace `DIGITAL-UNIVERSITY-OVERVIEW.md` | English | Non-canonical convenience mirror; du-docs `platform/architecture/` is canonical. |
-| ~~digital-university-architecture~~ | **OBSOLETE** | — | To be archived; not canonical for anything. |
+**Structure:** 5 Docusaurus instances — `platform` (/docs), `npp`, `student-cab`,
+`documents` (products), `contributing`. Build gate: `onBrokenLinks: throw`.
 
-**The one rule:** every documentation type resolves to exactly **one** canonical home. Everything else
-*links* to it — no copies.
+### 2.2 Service repo — the canonical home for everything service-scoped
 
-## De-dupe rules (overlaps to resolve)
+Required files, each with a defined role:
 
-- **Architecture & ADRs:** du-docs canonical; architecture-repo versions obsolete.
-- **Contributing:** du-docs `contributing/` = doc-writing only; `.github` = git/commit/PR/branch/release.
-  Trim du-docs `contributing/pr-workflow.md` (and any commit/branch restating) to *link* to `.github`.
-- **OpenAPI:** du-api-contracts canonical; du-docs adds an "API reference" page linking there; the
-  architecture-repo copy is obsolete.
+| File | Audience | Contract |
+|---|---|---|
+| `README.md` | humans | what the service is (2–3 sentences), build/run/test, links. MUST contain the standard `## Documentation` block (template: [`du-gateway/README.md`](https://github.com/ChernihivPolytechnicNationalUniversity/du-gateway/blob/main/README.md)): portal link + `.github` standards link + `AGENTS.md` link + local `docs/` index if present |
+| `AGENTS.md` | LLM agents | open standard ([agents.md](https://agents.md)), never a committed CLAUDE.md. Machine-oriented: architecture-in-brief, commands, conventions, gotchas. MUST link README + `docs/` + skills, and the [agent-tooling standard](./agent-tooling.md) |
+| `docs/` (optional) | humans | **service-scoped deep-dives only**: internals, service API detail, business logic, diagrams, guidebooks. Linked from README; back-referenced from the service's du-docs entry |
+| `.agents/skills/<name>/SKILL.md` (optional) | LLM agents | repo-specific skills, committed (team asset) — see the [agent-tooling standard](./agent-tooling.md) |
+| `.claude/skills/<name>` | Claude Code | committed **symlinks** → `../../.agents/skills/<name>` — see the [agent-tooling standard](./agent-tooling.md), incl. the Windows caveat |
+| `CLAUDE.md` | Claude Code (per-user) | **gitignored** thin facade `@AGENTS.md` |
 
-## Language policy — consequence to confirm
+**Ban list for repo docs (this is where split-brain comes from):**
 
-Adopting "technical = English" means du-docs' **existing** technical sections (`platform/architecture`,
-`platform/decisions`, `platform/iam`, `contributing`) — **currently written in Ukrainian** — are slated to
-migrate to English. Recommended approach: **incremental** (translate a page when it is next touched / as
-part of M2), not a big-bang rewrite. Product docs (`npp`, `student-cab`, `documents`) stay Ukrainian.
-No Docusaurus i18n machinery is required — language is determined by content type, and the multi-instance
-layout already separates technical from product docs. **Decision:** existing UA technical pages migrate to
-English **incrementally** — each page is translated when it is next substantively touched (and new
-technical pages are authored in English from the start). No big-bang rewrite.
+- No platform-level architecture (overall auth flow, other services' behavior, event
+  bus design) — link du-docs instead.
+- No copies of `.github` standards.
+- No aspirational/unimplemented designs presented as current — mark proposals
+  explicitly or move them to an ADR.
 
-## Migration plan (Approach A, phased — to execute after this spec is approved)
+**AGENTS.md ↔ README division:** README is for humans and stays prose-light;
+AGENTS.md is for agents and may duplicate *facts* (commands, ports) but not *prose*.
+AGENTS.md keeps a 5–10 line "architecture in brief" + link to the du-docs entry —
+agents get in-file orientation without needing the (auth-walled) portal.
 
-**M1 — Publish the map.**
-- Add a "where docs live" page to du-docs `contributing/` (English) and a 1-screen mirror in `.github`
-  (so it is surfaced org-wide). Cross-link them.
-- Add a **Documentation** section to each repo's `README.md` linking the portal (du-docs) + standards
-  (`.github`). (AGENTS.md already covers agent context.)
+### 2.3 `.github` (this repo) — canonical engineering process & org-wide standards
 
-**M2 — Fold architecture into du-docs.**
-- Reconcile the verified wiring from `DIGITAL-UNIVERSITY-OVERVIEW.md` into du-docs
-  `platform/architecture/`: verify sections 03 (context), 05 (building blocks), 06 (runtime view),
-  07 (deployment view) against current reality; update stale parts; add the service-relationship edge
-  list and the two diagrams (per du-docs' `contributing/diagrams.md` convention).
-- Record known debt in `11-risks-and-tech-debt.md`: studcab-app gateway bypass (to be reworked),
-  du-api-contracts published-but-unused, npp-api documented-but-unimplemented `/internal/events/stream`.
-- Reduce the workspace `DIGITAL-UNIVERSITY-OVERVIEW.md` to a pointer (or keep as the English onboarding
-  mirror, clearly marked non-canonical). Keep `OVERVIEW-REFRESH.md` as the maintenance recipe (retarget
-  it at the du-docs architecture pages over time).
+**Owns:** [branch strategy](./branch-strategy.md), [commit convention](./commit-convention.md),
+[PR guidelines](./pull-request-guidelines.md), [versioning](./versioning.md),
+[release process](./release-process.md), [observability standard](./observability-standard.md),
+[repository structure](./repository-structure.md), documentation IA (this document),
+and the [**agent-tooling standard**](./agent-tooling.md) (AGENTS.md convention, skills
+layout, CLAUDE.md facade, skill scopes). GitHub surfaces this repo org-wide — that's
+why standards live here and not in du-docs. du-docs `contributing/` links here, never
+restates.
 
-**M3 — De-dupe contributing vs standards.**
-- Make `.github` the single home for git/commit/PR/branch/versioning/release/observability/repo-structure.
-- Trim du-docs `contributing/` duplication to links; keep only doc-writing specifics.
+### 2.4 du-api-contracts — canonical API schemas
 
-**M4 — API reference.**
-- Add a du-docs "API reference" page linking to du-api-contracts (and/or rendering the OpenAPI).
-- Stop relying on the architecture-repo OpenAPI copy.
+du-docs `platform/api/intro.md` links it. Repos link it where relevant. Nobody
+hand-copies schemas.
 
-**M5 — Decommission.**
-- Add a deprecation pointer to `digital-university-architecture`'s README → du-docs, then the user
-  archives the repo.
+### 2.5 Workspace meta level — NOT a documentation home
 
-## Verification
+The maintainer's private control-center repo (`du-framework`) holds only what no
+public home should carry: repo-sync state, a pending-work register, scan playbooks,
+and workspace-level agent skills. **Rule: the meta level must not duplicate content
+that exists in du-docs** — wherever the portal covers an area, the meta level keeps
+only pointers plus whatever is genuinely meta (verified SHAs, gap annotations).
 
-- du-docs `cd ui && npm run build` is green (it throws on broken links / unknown tags — so links and
-  tags must be correct).
-- No architecture / ADR / OpenAPI duplication remains across homes (grep the obsolete repo is not linked
-  as canonical anywhere).
-- Every active repo `README.md` has a Documentation section linking portal + standards.
-- Spot-check du-docs `platform/architecture/` pages against the verified wiring in
-  `DIGITAL-UNIVERSITY-OVERVIEW.md` (gateway routes, event hub, M2M edges, standalone systems).
-- The "where docs live" map exists in both du-docs and `.github` and they agree.
+### 2.6 Deprecated surfaces
 
-## Out of scope
+- `digital-university-architecture`: obsolete, to be archived; never linked as canonical.
+- `docs/claude-code/` in npp-ui: replaced by the [agent-tooling standard](./agent-tooling.md)
+  + `.agents/skills/` layout.
 
-- Writing the actual product (user) documentation content for `npp` / `student-cab` / `documents`
-  (separate effort; this spec only fixes *where* it goes and in *what language*).
-- Re-authoring all existing UA technical pages in English at once (incremental — see Language policy).
-- Any change to `digital-university-architecture` beyond a deprecation pointer (the user archives it).
+## 3. Language policy
+
+Technical documentation → **English**; product/user documentation → **Ukrainian**.
+Existing Ukrainian technical pages migrate **incrementally**: any page substantively
+touched is translated in the same change; new technical pages start in English.
+Per-repo `docs/` deep-dives count as technical → English on touch.
+
+## 4. Cross-linking rules (the link graph)
+
+Mandatory links (— = link, → = direction):
+
+```
+repo README ── portal (du-docs) ── .github standards ── AGENTS.md (local)
+repo AGENTS.md ── README ── docs/ ── skills ── .github agent-tooling standard
+repo AGENTS.md ──► du-docs platform/architecture (cross-service context for agents;
+                   GitHub URL + local sibling-clone path, since the portal is auth-walled)
+du-docs component entry ──► repo README + repo docs/ deep-dives   (back-reference)
+du-docs contributing ──► .github process docs                      (link, never restate)
+.github where-docs-live ──► du-docs portal
+```
+
+Rules:
+
+1. Every link goes to the **canonical** home — never to a copy.
+2. du-docs → repo links use GitHub URLs (the portal is auth-walled; repos are the open side).
+3. New doc page ⇒ the author asks "which home?" per §2; wrong-home content is moved,
+   not mirrored.
+4. The link graph is verified by the du-docs build (`onBrokenLinks: throw`) and by
+   periodic workspace drift checks (§5).
+
+## 5. How this stays true (maintenance)
+
+- Periodic workspace sync scans verify docs against code at `origin/main`; found drift
+  is registered and fixed — including §2 contract breaches: ban-list violations,
+  missing README blocks, canonical-home breaches.
+- The du-docs CI build is the link-integrity gate.
+- The `## Documentation` README block and the AGENTS.md template are the rollout
+  vehicle for any future convention change.
