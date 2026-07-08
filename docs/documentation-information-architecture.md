@@ -61,6 +61,12 @@ Required files, each with a defined role:
 - No aspirational/unimplemented designs presented as current — mark proposals
   explicitly or move them to an ADR.
 
+Scope note: this ban list governs **service repo** docs only. Content §2.1 assigns to
+du-docs (platform architecture, IAM how-tos and cross-service reference, ADRs,
+product docs) is by definition not a violation *when it lives in du-docs* — judge the
+portal by §2.1's own owns/doesn't-own contract, not by this list. (Recorded after a
+2026-07-07 audit misread the du-docs IAM section as a ban-list breach.)
+
 **AGENTS.md ↔ README division:** README is for humans and stays prose-light;
 AGENTS.md is for agents and may duplicate *facts* (commands, ports) but not *prose*.
 AGENTS.md keeps a 5–10 line "architecture in brief" + link to the du-docs entry —
